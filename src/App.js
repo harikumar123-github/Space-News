@@ -1,23 +1,40 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react'
 import './App.css';
 
 function App() {
+
+
+  const [ newsList,setNewsList ] = useState([]);
+
+
+  useEffect( () => {
+    fetch('https://www.spaceflightnewsapi.net/api/v2/articles').then( res => (res.json()) ).then( data => {
+      setNewsList(data);
+    } );
+  },[] );
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      <div className="title">
+        <h1> Space News </h1>
+      </div>
+
+      <div className="newsContainer">
+
+          {newsList.map( (v,k) => {
+            return <div className="article" key={k} onClick={ () => { window.location.href = v.url } } >
+
+              <h3> {v.title} </h3>
+              <img src={v.imageUrl} alt="img" />
+              <p> {v.summary} </p>
+              <h4> {v.publishedAt} </h4>
+              
+             </div>
+          } )}
+
+      </div>
+
     </div>
   );
 }
